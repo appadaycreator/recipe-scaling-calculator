@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>レシピ量調整計算ツール【無料】簡単・無料計算</title>
+    <meta name="description" content="2人前→5人前など、レシピの材料量を人数分に自動換算。小数点も正確計算。登録不要・完全無料でご利用いただけます。">
+    <link rel="canonical" href="https://appadaycreator.github.io/recipe-scaling-calculator/">
+    <meta property="og:title" content="レシピ量調整計算ツール【無料】簡単・無料計算">
+    <meta property="og:description" content="2人前→5人前など、レシピの材料量を人数分に自動換算。小数点も正確計算。登録不要・完全無料でご利用いただけます。">
+    <meta property="og:url" content="https://appadaycreator.github.io/recipe-scaling-calculator/">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍳</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin>
+    <link rel="dns-prefetch" href="https://www.clarity.ms">
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+    <!-- GTM -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-TXQGZRF9');</script>
+    <!-- Clarity -->
+    <script type="text/javascript">(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y)})(window,document,"clarity","script","s3t9vl8h3v");</script>
+    <!-- AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8427583028015858" crossorigin="anonymous"></script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"レシピ量調整計算ツール","description":"2人前→5人前など、レシピの材料量を人数分に自動換算。小数点も正確計算。登録不要・完全無料でご利用いただけます。","url":"https://appadaycreator.github.io/recipe-scaling-calculator/","applicationCategory":"UtilityApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"JPY"}}</script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', 'Noto Sans JP', sans-serif; background: linear-gradient(135deg, #FFEDD5 0%, #FFF7ED 100%); min-height: 100vh; color: #333; line-height: 1.6; }
+        .site-header { background: #EA580C; color: white; padding: 32px 20px; text-align: center; }
+        .site-header .emoji { font-size: 52px; margin-bottom: 8px; }
+        .site-header h1 { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+        .site-header p { font-size: 14px; opacity: 0.9; }
+        .container { max-width: 800px; margin: 0 auto; padding: 16px; }
+        .card { background: white; border-radius: 16px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 16px; }
+        .btn { background: #EA580C; color: white; border: none; padding: 14px 24px; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; transition: opacity .2s; }
+        .btn:hover { opacity: 0.9; }
+        .btn:active { transform: scale(0.98); }
+        input, select, textarea { width: 100%; padding: 10px 14px; border: 1.5px solid #e2e8f0; border-radius: 8px; font-size: 15px; margin-top: 4px; font-family: inherit; }
+        input:focus, select:focus { outline: none; border-color: #EA580C; }
+        label { font-size: 13px; font-weight: 600; color: #555; display: block; margin-top: 14px; margin-bottom: 2px; }
+        .result { display: none; }
+        .result.show { display: block; }
+        .result-value { font-size: 36px; font-weight: 700; color: #EA580C; text-align: center; padding: 16px 0; }
+        .badge { display: inline-block; background: #EA580C20; color: #EA580C; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        /* ── サービス固有CSS ── */
+
+        .serving-row {
+          display: flex;
+          gap: 12px;
+          align-items: flex-end;
+          margin-bottom: 16px;
+        }
+        .serving-row > div {
+          flex: 1;
+        }
+        .serving-row label {
+          display: block;
+          font-size: 13px;
+          font-weight: 600;
+          color: #374151;
+          margin-bottom: 4px;
+        }
+        .serving-row input {
+          width: 100%;
+          padding: 10px 12px;
+          border: 1.5px solid #e5e7eb;
+          border-radius: 8px;
+          font-size: 16px;
+          box-sizing: border-box;
+          text-align: center;
+          transition: border-color .2s;
+        }
+        .serving-row input:focus {
+          outline: none;
+          border-color: #EA580C;
+        }
+        .arrow-icon {
+          font-size: 22px;
+          color: #EA580C;
+          padding-bottom: 10px;
+          flex: 0 0 auto;
+        }
+        .ingredient-header {
+          display: flex;
+          gap: 8px;
+          font-size: 12px;
+          font-weight: 700;
+          color: #64748b;
+          margin-bottom: 6px;
+          padding: 0 2px;
+        }
+        .ingredient-row {
+          display: flex;
+          gap: 8px;
+          margin-bottom: 8px;
+          align-items: center;
+        }
+        .ingredient-row input {
+          padding: 9px 10px;
+          border: 1.5px solid #e5e7eb;
+          border-radius: 8px;
+          font-size: 14px;
+          box-sizing: border-box;
+          transition: border-color .2s;
+        }
+        .ingredient-row input:focus {
+          outline: none;
+          border-color: #EA580C;
+        }
+        .ing-name { flex: 2; }
+        .ing-amount { flex: 1; text-align: right; }
+        .ing-unit { flex: 1; }
+        .del-btn {
+          background: none;
+          border: none;
+          color: #9ca3af;
+          font-size: 18px;
+          cursor: pointer;
+          padding: 4px 6px;
+          border-radius: 6px;
+          flex: 0 0 auto;
+          transition: color .2s;
+        }
+        .del-btn:hover { color: #ef4444; }
+        .add-ing-btn {
+          background: none;
+          border: 1.5px dashed #fdba74;
+          color: #EA580C;
+          width: 100%;
+          padding: 8px;
+          border-radius: 8px;
+          font-size: 13px;
+          cursor: pointer;
+          margin-top: 2px;
+          transition: background .2s;
+        }
+        .add-ing-btn:hover { background: #fff7ed; }
+        .result-table {
+          width: 100%;
+          border-collapse: collapse;
+          font-size: 14px;
+        }
+        .result-table th {
+          background: #ffedd5;
+          padding: 8px 10px;
+          text-align: left;
+          font-size: 12px;
+          color: #64748b;
+        }
+        .result-table td {
+          padding: 10px;
+          border-bottom: 1px solid #fee2c8;
+        }
+        .result-table tr:last-child td { border-bottom: none; }
+        .result-table .amount-col {
+          font-weight: 700;
+          color: #EA580C;
+          text-align: right;
+        }
+        .scale-badge {
+          display: inline-block;
+          background: #EA580C;
+          color: #fff;
+          border-radius: 20px;
+          padding: 2px 12px;
+          font-size: 13px;
+          font-weight: 700;
+          margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TXQGZRF9" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+    <header class="site-header">
+        <div class="emoji">🍳</div>
+        <h1>レシピ量調整計算ツール</h1>
+        <p>2人前→5人前など、レシピの材料量を人数分に自動換算。小数点も正確計算。</p>
+    </header>
+
+    <main class="container">
+        <ins class="adsbygoogle" style="display:block;margin:12px 0" data-ad-client="ca-pub-8427583028015858" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+
+        <div class="card">
+          <h2 style="font-size:18px;font-weight:700;margin-bottom:4px;">🍳 レシピ量調整計算ツール</h2>
+          <p style="color:#64748b;font-size:13px;margin-bottom:18px;">材料を入力して人数分の量を自動換算します</p>
+
+          <div class="serving-row">
+            <div>
+              <label>元の人数（人前）</label>
+              <input type="number" id="from-serving" value="2" min="0.5" step="0.5">
+            </div>
+            <div class="arrow-icon">→</div>
+            <div>
+              <label>作りたい人数（人前）</label>
+              <input type="number" id="to-serving" value="4" min="0.5" step="0.5">
+            </div>
+          </div>
+
+          <div style="margin-bottom:10px;">
+            <div class="ingredient-header">
+              <span style="flex:2;">材料名</span>
+              <span style="flex:1;text-align:right;">量</span>
+              <span style="flex:1;">単位</span>
+              <span style="flex:0 0 32px;"></span>
+            </div>
+            <div id="ingredient-list"></div>
+            <button class="add-ing-btn" onclick="addIngredient()">＋ 材料を追加</button>
+          </div>
+
+          <button class="btn" style="margin-top:12px;width:100%;" onclick="calculate()">量を換算する</button>
+
+          <div class="result" id="result" style="margin-top:16px;">
+            <div id="scale-info" class="scale-badge"></div>
+            <table class="result-table">
+              <thead>
+                <tr>
+                  <th>材料名</th>
+                  <th style="text-align:right;">換算後の量</th>
+                  <th>単位</th>
+                </tr>
+              </thead>
+              <tbody id="result-body"></tbody>
+            </table>
+            <div id="output" style="display:none;"></div>
+            <p id="detail" style="display:none;"></p>
+          </div>
+        </div>
+
+        <!-- 関連サービス -->
+        <div class="card" style="margin-top:8px;">
+            <h3 style="font-size:13px;font-weight:600;color:#888;margin-bottom:10px;">🔗 関連サービス</h3>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+                <a href="https://appadaycreator.github.io/pantry-chef/" style="color:#6366f1;font-size:13px;text-decoration:none;padding:6px 0;border-bottom:1px solid #f1f5f9;">PantryChef Pro →</a>
+                <a href="https://appadaycreator.github.io/food-restriction-advisor/" style="color:#6366f1;font-size:13px;text-decoration:none;padding:6px 0;border-bottom:1px solid #f1f5f9;">食事制限・アレルギー対応診断 →</a>
+                <a href="https://appadaycreator.github.io/calorie-calculator/" style="color:#6366f1;font-size:13px;text-decoration:none;padding:6px 0;border-bottom:1px solid #f1f5f9;">カロリー計算機 →</a>
+            </div>
+        </div>
+
+        <ins class="adsbygoogle" style="display:block;margin:12px 0" data-ad-client="ca-pub-8427583028015858" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </main>
+
+    <footer style="text-align:center;padding:20px;color:white;font-size:12px;opacity:0.75;margin-top:8px;">
+        <p><a href="https://appadaycreator.github.io/" style="color:white;">AppADayCreator</a>
+        | <a href="privacy-policy.html" style="color:white;">プライバシーポリシー</a>
+        | <a href="terms.html" style="color:white;">利用規約</a>
+        | <a href="contact.html" style="color:white;">お問い合わせ</a></p>
+        <p style="margin-top:6px;">© 2025 AppADayCreator. All services are free.</p>
+    </footer>
+
+    <script>
+    const BTN_COLOR = '#EA580C';
+    let ingCount = 0;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Enterキーで計算
+      document.querySelectorAll('input').forEach(inp => {
+        inp.addEventListener('keydown', e => { if (e.key === 'Enter') calculate(); });
+        inp.addEventListener('input', () => { if (document.querySelectorAll('input[type="number"]').length === 1) calculate(); });
+      });
+      // デフォルト材料をいくつか追加
+      const defaults = [
+        { name: '鶏もも肉', amount: '300', unit: 'g' },
+        { name: '玉ねぎ', amount: '1', unit: '個' },
+        { name: '醤油', amount: '大さじ2', unit: '' },
+        { name: '砂糖', amount: '小さじ1', unit: '' },
+      ];
+      defaults.forEach(d => addIngredient(d.name, d.amount, d.unit));
+    });
+
+    function addIngredient(name='', amount='', unit='') {
+      ingCount++;
+      const id = ingCount;
+      const row = document.createElement('div');
+      row.className = 'ingredient-row';
+      row.id = 'ing-row-' + id;
+      row.innerHTML = `
+        <input class="ing-name" type="text" placeholder="例: 鶏もも肉" value="${name}" id="ing-name-${id}">
+        <input class="ing-amount" type="text" placeholder="300" value="${amount}" id="ing-amount-${id}">
+        <input class="ing-unit" type="text" placeholder="g" value="${unit}" id="ing-unit-${id}">
+        <button class="del-btn" onclick="removeIngredient(${id})" title="削除">×</button>
+      `;
+      document.getElementById('ingredient-list').appendChild(row);
+    }
+
+    function removeIngredient(id) {
+      const row = document.getElementById('ing-row-' + id);
+      if (row) row.remove();
+    }
+
+    function parseAmount(str) {
+      // 「大さじ2」「小さじ1/2」「300」などをパース
+      str = String(str).trim();
+      const fractionMatch = str.match(/(\d+)\/(\d+)/);
+      if (fractionMatch) {
+        return parseFloat(fractionMatch[1]) / parseFloat(fractionMatch[2]);
+      }
+      // 大さじ・小さじのプレフィックスを処理
+      const prefixMatch = str.match(/^(大さじ|小さじ)(\d+(\.\d+)?)/);
+      if (prefixMatch) {
+        const prefix = prefixMatch[1];
+        const num = parseFloat(prefixMatch[2]);
+        return { prefix, num };
+      }
+      const num = parseFloat(str.replace(/[^0-9.]/g, ''));
+      return isNaN(num) ? null : num;
+    }
+
+    function formatAmount(original, ratio) {
+      const str = String(original).trim();
+      const prefixMatch = str.match(/^(大さじ|小さじ)(\d+(\.\d+)?)/);
+      if (prefixMatch) {
+        const prefix = prefixMatch[1];
+        const num = parseFloat(prefixMatch[2]);
+        const scaled = num * ratio;
+        const nice = formatNumber(scaled);
+        return prefix + nice;
+      }
+      const fractionMatch = str.match(/(\d+)\/(\d+)/);
+      if (fractionMatch) {
+        const num = parseFloat(fractionMatch[1]) / parseFloat(fractionMatch[2]);
+        return formatNumber(num * ratio);
+      }
+      const num = parseFloat(str);
+      if (!isNaN(num)) {
+        return formatNumber(num * ratio);
+      }
+      return str; // 数値でない場合そのまま返す（「適量」など）
+    }
+
+    function formatNumber(n) {
+      if (n === Math.round(n)) return String(Math.round(n));
+      // 1桁小数で表現
+      const r1 = Math.round(n * 10) / 10;
+      if (r1 === Math.round(r1)) return String(Math.round(r1));
+      return r1.toFixed(1);
+    }
+
+    function calculate() {
+      const fromServing = parseFloat(document.getElementById('from-serving').value);
+      const toServing = parseFloat(document.getElementById('to-serving').value);
+
+      if (!fromServing || fromServing <= 0) { alert('元の人数を入力してください'); return; }
+      if (!toServing || toServing <= 0) { alert('作りたい人数を入力してください'); return; }
+
+      const ratio = toServing / fromServing;
+
+      // 材料行を収集
+      const rows = document.querySelectorAll('[id^="ing-row-"]');
+      const tbody = document.getElementById('result-body');
+      tbody.innerHTML = '';
+      let hasData = false;
+
+      rows.forEach(row => {
+        const idMatch = row.id.match(/ing-row-(\d+)/);
+        if (!idMatch) return;
+        const id = idMatch[1];
+        const name = (document.getElementById('ing-name-' + id).value || '').trim();
+        const amount = (document.getElementById('ing-amount-' + id).value || '').trim();
+        const unit = (document.getElementById('ing-unit-' + id).value || '').trim();
+        if (!name && !amount) return;
+        hasData = true;
+
+        const scaledAmount = amount ? formatAmount(amount, ratio) : '';
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${name || '—'}</td>
+          <td class="amount-col">${scaledAmount}</td>
+          <td>${unit}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      if (!hasData) { alert('材料を1つ以上入力してください'); return; }
+
+      const scalePct = Math.round(ratio * 100);
+      document.getElementById('scale-info').textContent =
+        `${fromServing}人前 → ${toServing}人前（×${ratio % 1 === 0 ? ratio : ratio.toFixed(2)}）`;
+
+      document.getElementById('output').textContent = '';
+      document.getElementById('detail').textContent = '';
+      document.getElementById('result').classList.add('show');
+    }
+    </script>
+</body>
+</html>
